@@ -14,12 +14,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 
-        guard let windowScene = (scene as? UIWindowScene) else { return }
-        window = UIWindow(frame: windowScene.coordinateSpace.bounds)
-        window?.windowScene = windowScene
+        guard let windowScene      = (scene as? UIWindowScene) else { return }
+        window                     = UIWindow(frame: windowScene.coordinateSpace.bounds)
+        window?.windowScene        = windowScene
         window?.rootViewController = createTabBar()
         window?.makeKeyAndVisible()
         
+        configureNavigationBar()
     }
 
     
@@ -40,6 +41,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         return UINavigationController(rootViewController: favoriteVC)
     }
     
+    
     private func createTabBar() -> UITabBarController {
         let tabBar = UITabBarController()
         UITabBar.appearance().tintColor = .systemGreen
@@ -47,6 +49,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         return tabBar
     }
+    
+    
+    private func configureNavigationBar() {
+        UINavigationBar.appearance().tintColor = .systemGreen
+        UINavigationBar.appearance().prefersLargeTitles = true
+    }
+    
     
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
