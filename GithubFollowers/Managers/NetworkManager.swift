@@ -13,29 +13,29 @@ class NetworkManager {
     
     let baseURL = "https://api.github.com/users/"
     
-    func getFollowers(username: String, page: Int, completion: @escaping ([Follower]?, String?) -> Void) {
+    func getFollowers(username: String, page: Int, completion: @escaping (Result<[Follower], GFError>) -> Void) {
         let endPoint = baseURL + "\(username)/followers?per_page=100&page=\(page)"
         
         guard let url = URL(string: endPoint) else {
             
-            completion(nil,"Something went wrong")
+            completion(.failure(.invalidUsername))
             return
         }
         
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             
             if let _ = error {
-                completion(nil, "Something went wrong")
+                completion(.failure(.unableToComplete))
                 return
             }
             
             guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                completion(nil, "Something went wrong")
+                completion(.failure(.invalidResponse))
                 return
             }
             
             guard let data = data else {
-                completion(nil, "Something went wrong")
+                completion(.failure(.invalidData))
                 return
             }
             
@@ -44,10 +44,10 @@ class NetworkManager {
                 let decorder = JSONDecoder()
                 decorder.keyDecodingStrategy = .convertFromSnakeCase
                 let followers = try decorder.decode([Follower].self, from: data)
-                completion(followers, nil)
+                completion(.success(followers))
                 
             } catch {
-                completion(nil, "Something went wrong")
+                completion(.failure(.invalidData))
             }
         }
         
