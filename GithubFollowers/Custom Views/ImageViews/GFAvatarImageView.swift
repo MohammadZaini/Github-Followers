@@ -9,7 +9,6 @@ import UIKit
 
 class GFAvatarImageView: UIImageView {
 
-    
     var placeholderImage = UIImage(named: "avatar-placeholder")!
     let cache            = NetworkManager.shared.cache
     
